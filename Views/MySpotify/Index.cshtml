@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Music>
+
+<div style="display: flex">
+<div style="color: green; margin-right: 10em">
+    <h3 style="color: azure">Top Artists</h3>
+    
+    <ol style="margin-bottom: 2em">
+        @foreach(Artist artist in ViewBag.ArtistList)
+        {
+            <li>@artist.Name</li>
+        }
+    </ol>
+
+    <h3 style="color: azure">Top Musics</h3>
+    
+    <ol>
+        @foreach(Music music in ViewBag.Music)
+        {
+            <li>@music.Song.Title - @music.Artist.Name</li>
+        }
+    </ol>
+</div>
+
+<div style="color: green">
+    <h3 style="color: azure">Billboard Top 20</h3>
+
+    <ol>
+        @foreach(Music music in Model)
+        {
+            <li>@music.Song.Title - @music.Artist.Name</li>
+        }
+    </ol>
+</div>
+</div>

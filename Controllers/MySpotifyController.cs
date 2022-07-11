@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SD_310_W22SD_Assignment.Models;
+using System.Linq;
 
 namespace SD_310_W22SD_Assignment.Controllers
 {
@@ -15,7 +16,9 @@ namespace SD_310_W22SD_Assignment.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            ViewBag.ArtistList = _db.Artists;
+            ViewBag.Music = _db.Musics.Take(5).Include(m => m.Artist).Include(m => m.Song);
+            return View(_db.Musics.Include(m => m.Artist).Include(m => m.Song));
         }
 
         public IActionResult UserCollection(int? id)
