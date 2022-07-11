@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Music>
 
 <div style="display: flex">
-<div style="color: green; margin-right: 10em">
+<div style="color: green; margin-right: 6em">
     <h3 style="color: azure">Top Artists</h3>
     
     <ol style="margin-bottom: 2em">
@@ -21,14 +21,40 @@
     </ol>
 </div>
 
-<div style="color: green">
-    <h3 style="color: azure">Billboard Top 20</h3>
+<div style="color: green; width: 700px">
+    <h3 style="color: azure">Billboard Top 10</h3>
 
-    <ol>
-        @foreach(Music music in Model)
-        {
-            <li>@music.Song.Title - @music.Artist.Name</li>
-        }
-    </ol>
+    <table class="table">
+    <thead style="color: azure">
+        <tr>
+            <th>
+                Top
+            </th>
+            <th>
+                Song
+            </th>
+            <th>
+                Title
+            </th>
+        </tr>
+    </thead>
+    <tbody style="color: green">
+@foreach (Music music in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => music.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => music.Song.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => music.Artist.Name)
+            </td>
+
+        </tr>
+}
+    </tbody>
+</table>
+
 </div>
 </div>

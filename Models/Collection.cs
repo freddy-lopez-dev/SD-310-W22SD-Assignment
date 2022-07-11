@@ -11,5 +11,20 @@ namespace SD_310_W22SD_Assignment.Models
 
         public virtual Music? Music { get; set; }
         public virtual User? User { get; set; }
+
+        public Collection()
+        {
+
+        }
+
+        public Collection(User user, Music music)
+        {
+            User = user;
+            Music = music;
+            MusicId = music.Id;
+            UserId = user.Id;
+        }
     }
+
+
 }

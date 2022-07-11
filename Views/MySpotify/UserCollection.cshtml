@@ -2,7 +2,7 @@
 
 <h3 style="color: azure">User Music Collection</h3>
 
-<div class="row" style="border-bottom: 1px solid azure">
+<div class="row" style="border-bottom: 1px solid azure; padding-bottom: 1em">
     <div class="col-md-10">
         <form asp-action="UserCollection" method="get">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -10,7 +10,7 @@
             <div class="form-group">
                 <label style="color: azure">Select a User:</label>
                 @Html.DropDownList("Id", ViewBag.UserList as SelectList)
-                <input type="submit" value="Get User" class="btn btn-primary" style="background-color: green"/>
+                <input type="submit" value="Get User" class="btn" style="background-color: green"/>
             </div>
         </form>
     </div>
@@ -38,10 +38,42 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Music.Song.Title)
             </td>
+
         </tr>
 }
     </tbody>
 </table>
-}
+<div class="row" style="border-bottom: 1px solid azure; padding-bottom: 1em">
+    <div class="col-md-10">
+        <form asp-action="UserCollection" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <div class="form-group">
+                <label style="color: azure">Add new Music to collection</label>
+                @Html.DropDownList("Id", ViewBag.MusicList as SelectList)
+                <input type="submit" value="Add Music" class="btn" style="background-color: green"/>
+                <input type="hidden" value="@Model.First().UserId" name="userId" />
+            </div>
+        </form>
+    </div>
+</div>
+} 
+
+@if(Model == null)
+{
+    <div class="row" style="border-bottom: 1px solid azure; padding-bottom: 1em; margin-top: 1em">
+    <div class="col-md-10">
+        <form asp-action="UserCollection" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label style="color: azure">Add new Music to collection</label>
+                @Html.DropDownList("Id", ViewBag.MusicList as SelectList)
+                <input type="submit" value="Add Music" class="btn btn-primary" style="background-color: green"/>
+                <input type="hidden" value="@ViewBag.userId" name="userId" />
+            </div>
+        </form>
+    </div>
+</div>
+}
 
