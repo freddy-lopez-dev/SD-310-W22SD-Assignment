@@ -25,8 +25,14 @@ namespace SD_310_W22SD_Assignment.Controllers
         public IActionResult UserCollection(int? id = 1)
         {
             SelectList userList = new SelectList(_db.Users, "Id", "Name");
-            SelectList musicList = new SelectList(_db.Songs, "Id", "Title");
             ViewBag.UserList = userList;
+            List<SelectListItem> musicList = new List<SelectListItem>();
+            List<Music> myMusic = _db.Musics.Include(m => m.Song).Include(m => m.Artist).ToList();
+            myMusic.ForEach(m =>
+            {
+                string music = $"{m.Song.Title} - {m.Artist.Name}";
+                musicList.Add(new SelectListItem(music, m.Id.ToString()));
+            });
             ViewBag.MusicList = musicList;
             ViewBag.userId = id;
             if (id.HasValue)
@@ -49,7 +55,7 @@ namespace SD_310_W22SD_Assignment.Controllers
         [HttpPost]
         public IActionResult UserCollection(int id, int userId)
         {
-            Music currentMusic = _db.Musics.First(m => m.SongId == id);
+            Music currentMusic = _db.Musics.First(m => m.Id == id);
             User currentUser = _db.Users.First(u => u.Id == userId);
             Collection newCollection = new Collection(currentUser, currentMusic);
             _db.Collections.Add(newCollection);

@@ -10,7 +10,7 @@
             <div class="form-group">
                 <label style="color: azure">Select a User:</label>
                 @Html.DropDownList("Id", ViewBag.UserList as SelectList)
-                <input type="submit" value="Get User" class="btn" style="background-color: green"/>
+                <input type="submit" value="Get Collection" class="btn" style="background-color: green"/>
             </div>
         </form>
     </div>
@@ -50,7 +50,7 @@
 
             <div class="form-group">
                 <label style="color: azure">Add new Music to collection</label>
-                @Html.DropDownList("Id", ViewBag.MusicList as SelectList)
+                <select name="id" asp-items="@ViewBag.MusicList"></select>
                 <input type="submit" value="Add Music" class="btn" style="background-color: green"/>
                 <input type="hidden" value="@Model.First().UserId" name="userId" />
             </div>
@@ -68,8 +68,8 @@
 
             <div class="form-group">
                 <label style="color: azure">Add new Music to collection</label>
-                @Html.DropDownList("Id", ViewBag.MusicList as SelectList)
-                <input type="submit" value="Add Music" class="btn btn-primary" style="background-color: green"/>
+                <select name="id" asp-items="@ViewBag.MusicList"></select>
+                <input type="submit" value="Add Music" class="btn" style="background-color: green"/>
                 <input type="hidden" value="@ViewBag.userId" name="userId" />
             </div>
         </form>
