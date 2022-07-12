@@ -1,0 +1,14 @@
+﻿@using SD_310_W22SD_Assignment.Models.ViewModels
+@model ArtistSelectViewModel
+
+<h3 style="color: azure">Find Artists</h3>
+
+<div class="row" style="border-bottom: 1px solid azure; padding-bottom: 1em">
+    <div class="col-md-10">
+        <form asp-action="ArtistDetails" method="get">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <select name="artistId" asp-items="Model.ArtistsList"></select>
+            <input type="submit" value="Get Songs" class="btn" style="background-color: green"/>
+        </form>
+    </div>
+</div>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SD_310_W22SD_Assignment.Models;
+using SD_310_W22SD_Assignment.Models.ViewModels;
 using System.Linq;
 
 namespace SD_310_W22SD_Assignment.Controllers
@@ -61,6 +62,35 @@ namespace SD_310_W22SD_Assignment.Controllers
             ViewBag.UserList = userList;
             ViewBag.MusicList = musicList;
             return View(_db.Collections.Where(c => c.UserId == currentUser.Id).OrderBy(c => c.Music.Artist.Name).Include(c => c.Music).ThenInclude(m => m.Song).Include(m => m.Music).ThenInclude(m => m.Artist));
+        }
+
+        public IActionResult FindArtist()
+        {
+            ArtistSelectViewModel vm = new ArtistSelectViewModel(_db.Artists.ToList());
+            return View(vm);
+        }
+
+        public IActionResult ArtistDetails(int? artistId)
+        {
+            
+            if (artistId != null)
+            {
+                try
+                {
+                    Artist currentArtist = _db.Artists.Include(a => a.Musics).ThenInclude(m => m.Song).First(c => c.Id == artistId);
+                    ArtistDetailsViewModel vm = new ArtistDetailsViewModel(currentArtist, _db.Collections.ToList());
+                    return View(vm);
+                }
+                catch
+                {
+                    return RedirectToAction("Error", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
         }
 
     }
