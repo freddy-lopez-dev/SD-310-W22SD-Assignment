@@ -55,18 +55,33 @@ namespace SD_310_W22SD_Assignment.Controllers
         [HttpPost]
         public IActionResult UserCollection(int musicId, int userId)
         {
-            Music currentMusic = _db.Musics.First(m => m.Id == musicId);
+            Music currentMusic = _db.Musics.Include(m => m.Song).First(m => m.Id == musicId);
             User currentUser = _db.Users.First(u => u.Id == userId);
-            Collection newCollection = new Collection(currentUser, currentMusic);
-            _db.Collections.Add(newCollection);
-            currentMusic.Collections.Add(newCollection);
-            currentUser.Collections.Add(newCollection);
-            _db.SaveChanges();
-
+            bool checkCollection = _db.Collections.Any(c => (c.MusicId == musicId) && (c.UserId == userId));
+            if (checkCollection != true)
+            {
+                Collection newCollection = new Collection(currentUser, currentMusic);
+                _db.Collections.Add(newCollection);
+                currentMusic.Collections.Add(newCollection);
+                currentUser.Collections.Add(newCollection);
+                _db.SaveChanges();
+                ViewBag.Notification = $"{currentMusic.Song.Title} successfully added to the collection!";
+            } else
+            {
+                ViewBag.Notification = $"{currentMusic.Song.Title} is already in the collection!";
+            }
+            ViewBag.isValidEntry = checkCollection;
             SelectList userList = new SelectList(_db.Users.OrderByDescending(u => u.Id == userId), "Id", "Name");
-            SelectList musicList = new SelectList(_db.Songs, "Id", "Title");
             ViewBag.UserList = userList;
+            List<SelectListItem> musicList = new List<SelectListItem>();
+            List<Music> myMusic = _db.Musics.Include(m => m.Song).Include(m => m.Artist).ToList();
+            myMusic.ForEach(m =>
+            {
+                string music = $"{m.Song.Title} - {m.Artist.Name}";
+                musicList.Add(new SelectListItem(music, m.Id.ToString()));
+            });
             ViewBag.MusicList = musicList;
+
             return View(_db.Collections.Where(c => c.UserId == currentUser.Id).OrderBy(c => c.Music.Artist.Name).Include(c => c.Music).ThenInclude(m => m.Song).Include(m => m.Music).ThenInclude(m => m.Artist));
         }
 

@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<Collection>
 
 <h3 style="color: azure">User Music Collection</h3>
-
 <div class="row" style="border-bottom: 1px solid azure; padding-bottom: 1em">
     <div class="col-md-10">
         <form asp-action="UserCollection" method="get">
@@ -13,6 +12,7 @@
                 <input type="submit" value="Get Collection" class="btn" style="background-color: green"/>
             </div>
         </form>
+        
     </div>
 </div>
 
@@ -43,6 +43,14 @@
 }
     </tbody>
 </table>
+    @if(ViewBag.isValidEntry == false)
+    {
+       <p style="color: green">@ViewBag.Notification</p> 
+    } 
+    else
+    {
+       <p style="color: red">@ViewBag.Notification</p>   
+    } 
 <div class="row" style="border-bottom: 1px solid azure; padding-bottom: 1em">
     <div class="col-md-10">
         <form asp-action="UserCollection" method="post">
