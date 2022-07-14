@@ -50,7 +50,7 @@
 
             <div class="form-group">
                 <label style="color: azure">Add new Music to collection</label>
-                <select name="id" asp-items="@ViewBag.MusicList"></select>
+                <select name="musicId" asp-items="@ViewBag.MusicList"></select>
                 <input type="submit" value="Add Music" class="btn" style="background-color: green"/>
                 <input type="hidden" value="@Model.First().UserId" name="userId" />
             </div>
@@ -68,7 +68,7 @@
 
             <div class="form-group">
                 <label style="color: azure">Add new Music to collection</label>
-                <select name="id" asp-items="@ViewBag.MusicList"></select>
+                <select name="musicId" asp-items="@ViewBag.MusicList"></select>
                 <input type="submit" value="Add Music" class="btn" style="background-color: green"/>
                 <input type="hidden" value="@ViewBag.userId" name="userId" />
             </div>

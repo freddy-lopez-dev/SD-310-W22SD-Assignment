@@ -53,9 +53,9 @@ namespace SD_310_W22SD_Assignment.Controllers
         }
 
         [HttpPost]
-        public IActionResult UserCollection(int id, int userId)
+        public IActionResult UserCollection(int musicId, int userId)
         {
-            Music currentMusic = _db.Musics.First(m => m.Id == id);
+            Music currentMusic = _db.Musics.First(m => m.Id == musicId);
             User currentUser = _db.Users.First(u => u.Id == userId);
             Collection newCollection = new Collection(currentUser, currentMusic);
             _db.Collections.Add(newCollection);
@@ -63,7 +63,7 @@ namespace SD_310_W22SD_Assignment.Controllers
             currentUser.Collections.Add(newCollection);
             _db.SaveChanges();
 
-            SelectList userList = new SelectList(_db.Users, "Id", "Name");
+            SelectList userList = new SelectList(_db.Users.OrderByDescending(u => u.Id == userId), "Id", "Name");
             SelectList musicList = new SelectList(_db.Songs, "Id", "Title");
             ViewBag.UserList = userList;
             ViewBag.MusicList = musicList;
