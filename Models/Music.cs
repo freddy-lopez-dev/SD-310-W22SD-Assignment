@@ -13,6 +13,7 @@ namespace SD_310_W22SD_Assignment.Models
         public int Id { get; set; }
         public int? SongId { get; set; }
         public int? ArtistId { get; set; }
+        public float? Price { get; set; }
 
         public virtual Artist? Artist { get; set; }
         public virtual Song? Song { get; set; }

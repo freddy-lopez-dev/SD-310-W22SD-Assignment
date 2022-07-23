@@ -8,6 +8,8 @@ namespace SD_310_W22SD_Assignment.Models
         public int Id { get; set; }
         public int? MusicId { get; set; }
         public int? UserId { get; set; }
+        public DateTime PurchaseDate { get; set; }
+        public int Rating { get; set; }
 
         public virtual Music? Music { get; set; }
         public virtual User? User { get; set; }
@@ -23,6 +25,8 @@ namespace SD_310_W22SD_Assignment.Models
             Music = music;
             MusicId = music.Id;
             UserId = user.Id;
+            PurchaseDate = DateTime.Now;
+            Rating = 0;
         }
     }
 

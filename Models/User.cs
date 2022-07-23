@@ -12,6 +12,7 @@ namespace SD_310_W22SD_Assignment.Models
 
         public int Id { get; set; }
         public string? Name { get; set; }
+        public float? Wallet { get; set; }
 
         public virtual ICollection<Collection> Collections { get; set; }
     }
