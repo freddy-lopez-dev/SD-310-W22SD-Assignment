@@ -22,6 +22,8 @@ namespace SD_310_W22SD_Assignment.Controllers
             return View(_db.Musics.Take(9).Include(m => m.Artist).Include(m => m.Song));
         }
 
+        //Studied dropdown before class.
+        //Took some ideas here https://stackoverflow.com/questions/33667310/convert-my-listint-into-a-listselectlistitem
         public IActionResult UserCollection(int? id = 1)
         {
             SelectList userList = new SelectList(_db.Users, "Id", "Name");
