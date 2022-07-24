@@ -18,25 +18,23 @@ namespace SD_310_W22SD_Assignment.Models.ViewModels
                 UserList.Add(new SelectListItem(u.Name, u.Id.ToString()));
             });
             Collections = collections;
-            music.ForEach(m =>
+            if (collections.Count() == 0)
             {
-                if(collections.Count() == 0)
+                List<Music> orderedMusic = music.OrderBy(m => m.Artist.Name).ToList();
+                orderedMusic.ForEach(m =>
                 {
                     string txt = $"{m.Song.Title} - {m.Artist.Name} ({m.Price})";
                     MusicList.Add(new SelectListItem(txt, m.Id.ToString()));
-                } else
+                });
+            } else
+            {
+                List<Music> checkedMusic = music.Where(m => !collections.Any(c => c.MusicId == m.Id)).ToList();
+                checkedMusic.ForEach(m =>
                 {
-                    foreach (Collection collection in collections)
-                    {
-                        if (collection.MusicId != m.Id)
-                        {
-                            string txt = $"{m.Song.Title} - {m.Artist.Name} ({m.Price})";
-                            MusicList.Add(new SelectListItem(txt, m.Id.ToString()));
-
-                        }
-                    }
-                }                
-            });
+                    string txt = $"{m.Song.Title} - {m.Artist.Name} ({m.Price})";
+                    MusicList.Add(new SelectListItem(txt, m.Id.ToString()));
+                });
+            }
         }
     }
 }

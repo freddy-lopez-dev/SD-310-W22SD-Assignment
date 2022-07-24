@@ -24,11 +24,11 @@ namespace SD_310_W22SD_Assignment.Controllers
 
         //Studied dropdown before class.
         //Took some ideas here https://stackoverflow.com/questions/33667310/convert-my-listint-into-a-listselectlistitem
-        public IActionResult UserCollection(int? id = 1)
+        public IActionResult UserCollection(int? userId = 1)
         {
-            User currentUser = _db.Users.First(u => u.Id == id);
+            User currentUser = _db.Users.First(u => u.Id == userId);
             IEnumerable<Collection> collections = _db.Collections.Where(c => c.UserId == currentUser.Id).OrderBy(c => c.Music.Artist.Name).Include(c => c.Music).ThenInclude(m => m.Song).Include(m => m.Music).ThenInclude(m => m.Artist);
-            CollectionViewModel cvm = new CollectionViewModel(_db.Users.ToList(), _db.Musics.Include(m => m.Song).Include(m => m.Artist).ToList(), collections.ToList());
+            CollectionViewModel cvm = new CollectionViewModel(_db.Users.OrderByDescending(u => u.Id == userId).ToList(), _db.Musics.Include(m => m.Song).Include(m => m.Artist).ToList(), collections.ToList());
             cvm.CurrentUser = currentUser;
             return View(cvm);
         }
@@ -47,24 +47,15 @@ namespace SD_310_W22SD_Assignment.Controllers
                 currentUser.Collections.Add(newCollection);
                 _db.SaveChanges();
                 ViewBag.Notification = $"{currentMusic.Song.Title} successfully added to the collection!";
-            } else
+            }
+            else
             {
                 ViewBag.Notification = $"{currentMusic.Song.Title} is already in the collection!";
             }
             ViewBag.isValidEntry = checkCollection;
-            SelectList userList = new SelectList(_db.Users.OrderByDescending(u => u.Id == userId), "Id", "Name");
-            ViewBag.UserList = userList;
-            List<SelectListItem> musicList = new List<SelectListItem>();
-            List<Music> myMusic = _db.Musics.Include(m => m.Song).Include(m => m.Artist).ToList();
-            myMusic.ForEach(m =>
-            {
-                string music = $"{m.Song.Title} - {m.Artist.Name}";
-                musicList.Add(new SelectListItem(music, m.Id.ToString()));
-            });
-            ViewBag.MusicList = musicList;
 
-            return View(_db.Collections.Where(c => c.UserId == currentUser.Id).OrderBy(c => c.Music.Artist.Name).Include(c => c.Music).ThenInclude(m => m.Song).Include(m => m.Music).ThenInclude(m => m.Artist));
-        }
+            return RedirectToAction("UserCollection", new { userId });
+        }       
 
         public IActionResult FindArtist()
         {

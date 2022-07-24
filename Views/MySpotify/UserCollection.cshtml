@@ -2,7 +2,10 @@
 @model CollectionViewModel
 
 <div style="display: flex; align-items: center; justify-content: space-between">
+    <div>
     <h3 style="color: azure">@Model.CurrentUser.Name Music Collection</h3>
+    <h4 style="color: azure">Wallet: @Model.CurrentUser.Wallet</h4>
+    </div>
     <div>
         <form asp-action="UserCollection" method="get">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -52,14 +55,14 @@
     } 
 <div class="row" style="border-bottom: 1px solid azure; padding-bottom: 1em">
     <div class="col-md-10">
-        <form asp-action="UserCollection" method="post">
+        <form asp-action="UserCollection" asp-route-id="@Model.CurrentUser.Id" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label style="color: azure">Add new Music to collection</label>
-                <select name="musicId" asp-items="Model.MusicList"></select>
+                <label style="color: azure">Available Music to Purchase:</label>
+                <select name="musicId" asp-items="@Model.MusicList"></select>
                 <input type="submit" value="Buy music" class="btn" style="background-color: green"/>
-                <input type="hidden" value="Model.Collection.First().UserId" name="userId" />
+                <input type="hidden" value="@Model.CurrentUser.Id" name="userId" />
             </div>
         </form>
     </div>
@@ -70,14 +73,14 @@
 {
     <div class="row" style="border-bottom: 1px solid azure; padding-bottom: 1em; margin-top: 1em">
     <div class="col-md-10">
-        <form asp-action="UserCollection" method="post">
+        <form asp-action="UserCollection" asp-route-id="@Model.CurrentUser.Id" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label style="color: azure">Add new Music to collection</label>
-                <select name="musicId" asp-items="@ViewBag.MusicList"></select>
+                <label style="color: azure">Available Music to Purchase:</label>
+                <select name="musicId" asp-items="@Model.MusicList"></select>
                 <input type="submit" value="Buy music" class="btn" style="background-color: green"/>
-                <input type="hidden" value="@ViewBag.userId" name="userId" />
+                <input type="hidden" value="@Model.CurrentUser.Id" name="userId" />
             </div>
         </form>
     </div>
