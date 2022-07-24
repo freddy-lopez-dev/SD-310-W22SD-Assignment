@@ -26,32 +26,11 @@ namespace SD_310_W22SD_Assignment.Controllers
         //Took some ideas here https://stackoverflow.com/questions/33667310/convert-my-listint-into-a-listselectlistitem
         public IActionResult UserCollection(int? id = 1)
         {
-            SelectList userList = new SelectList(_db.Users, "Id", "Name");
-            ViewBag.UserList = userList;
-            List<SelectListItem> musicList = new List<SelectListItem>();
-            List<Music> myMusic = _db.Musics.Include(m => m.Song).Include(m => m.Artist).ToList();
-            myMusic.ForEach(m =>
-            {
-                string music = $"{m.Song.Title} - {m.Artist.Name}";
-                musicList.Add(new SelectListItem(music, m.Id.ToString()));
-            });
-            ViewBag.MusicList = musicList;
-            ViewBag.userId = id;
-            if (id.HasValue)
-            {
-                User currentUser = _db.Users.First(u => u.Id == id);
-                IEnumerable<Collection> collections = _db.Collections.Where(c => c.UserId == currentUser.Id).OrderBy(c => c.Music.Artist.Name).Include(c => c.Music).ThenInclude(m => m.Song).Include(m => m.Music).ThenInclude(m => m.Artist);
-                if(collections.Count() == 0)
-                {
-                    return View();
-                } else
-                {
-                    return View(collections);
-                }
-            } else
-            {
-                return View();
-            }            
+            User currentUser = _db.Users.First(u => u.Id == id);
+            IEnumerable<Collection> collections = _db.Collections.Where(c => c.UserId == currentUser.Id).OrderBy(c => c.Music.Artist.Name).Include(c => c.Music).ThenInclude(m => m.Song).Include(m => m.Music).ThenInclude(m => m.Artist);
+            CollectionViewModel cvm = new CollectionViewModel(_db.Users.ToList(), _db.Musics.Include(m => m.Song).Include(m => m.Artist).ToList(), collections.ToList());
+            cvm.CurrentUser = currentUser;
+            return View(cvm);
         }
 
         [HttpPost]
