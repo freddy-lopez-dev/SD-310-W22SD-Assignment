@@ -75,6 +75,15 @@ namespace SD_310_W22SD_Assignment.Controllers
             return RedirectToAction("UserCollection", new { userId });
         }
 
+        [HttpPost]
+        public IActionResult RateMusic(int rateCount, int userId, int collectionId)
+        {
+            Collection currentCollection = _db.Collections.First(c => c.Id == collectionId);
+            currentCollection.Rating = rateCount + 1;
+            _db.SaveChanges();
+            return RedirectToAction("UserCollection", new { userId });
+        }
+
         public IActionResult FindArtist()
         {
             ArtistSelectViewModel vm = new ArtistSelectViewModel(_db.Artists.ToList());

@@ -35,6 +35,9 @@
             <th>
                 Purchase Date
             </th>
+            <th>
+                Rating
+            </th>
         </tr>
     </thead>
     <tbody style="color: green">
@@ -60,7 +63,33 @@
                     <p>Refund not allowed(Over 30 days)</p>                            
                 }
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurchaseDate)
+            </td>
+            <td>
+                        @for(int lightStrIndex = 0; lightStrIndex < item.Rating; lightStrIndex++)
+                        {
+                            <form asp-action="RateMusic" method="post" style="color: green; display: inline">
+                            <input type="hidden" value="@lightStrIndex" name="rateCount"/>
+                            <input type="hidden" value="@item.Id" name="collectionId"/>
+                            <input type="hidden" value="@item.UserId" name="userId"/>
+                            <button type="submit" style="border: 0px; background-color: transparent; padding: 0px; color: green"><span>&#9733</span></button>
+                            </form>
+                            
+						}
 
+                        @for(int darkStrIndex = item.Rating; darkStrIndex < 5; darkStrIndex++)
+                        {
+                            <form asp-action="RateMusic" method="post" style="color: green; display: inline">
+                            <input type="hidden" value="@darkStrIndex" name="rateCount"/>
+                            <input type="hidden" value="@item.Id" name="collectionId"/>
+                            <input type="hidden" value="@item.UserId" name="userId"/>
+                            <button type="submit" style="border: 0px; background-color: transparent; padding: 0px; color: green"><span>&#9734</span></button>
+                            </form>
+                        }
+
+                        <span>@item.Rating / 5</span>
+                    </td>
         </tr>
 }
     </tbody>
