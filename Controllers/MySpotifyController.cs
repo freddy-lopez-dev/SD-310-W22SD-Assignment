@@ -22,14 +22,17 @@ namespace SD_310_W22SD_Assignment.Controllers
             return View(_db.Musics.Take(9).Include(m => m.Artist).Include(m => m.Song));
         }
 
-        //Studied dropdown before class.
-        //Took some ideas here https://stackoverflow.com/questions/33667310/convert-my-listint-into-a-listselectlistitem
+        //Refactored into ViewModel from ViewBag
         public IActionResult UserCollection(int? userId = 1)
         {
             User currentUser = _db.Users.First(u => u.Id == userId);
             IEnumerable<Collection> collections = _db.Collections.Where(c => c.UserId == currentUser.Id).OrderBy(c => c.Music.Artist.Name).Include(c => c.Music).ThenInclude(m => m.Song).Include(m => m.Music).ThenInclude(m => m.Artist);
             CollectionViewModel cvm = new CollectionViewModel(_db.Users.OrderByDescending(u => u.Id == userId).ToList(), _db.Musics.Include(m => m.Song).Include(m => m.Artist).ToList(), collections.ToList());
             cvm.CurrentUser = currentUser;
+            //Studied tempdata
+            //https://www.tutorialsteacher.com/mvc/tempdata-in-asp.net-mvc
+            ViewBag.Alert = TempData["ValidPurchase"];
+            ViewBag.Notification = TempData["notification"];
             return View(cvm);
         }
 
@@ -38,21 +41,23 @@ namespace SD_310_W22SD_Assignment.Controllers
         {
             Music currentMusic = _db.Musics.Include(m => m.Song).First(m => m.Id == musicId);
             User currentUser = _db.Users.First(u => u.Id == userId);
-            bool checkCollection = _db.Collections.Any(c => (c.MusicId == musicId) && (c.UserId == userId));
-            if (checkCollection != true)
+            if(currentUser.Wallet > currentMusic.Price)
             {
                 Collection newCollection = new Collection(currentUser, currentMusic);
                 _db.Collections.Add(newCollection);
                 currentMusic.Collections.Add(newCollection);
                 currentUser.Collections.Add(newCollection);
+                currentUser.Wallet -= currentMusic.Price;
                 _db.SaveChanges();
-                ViewBag.Notification = $"{currentMusic.Song.Title} successfully added to the collection!";
-            }
-            else
+                TempData["validPurchase"] = true;
+                TempData["notification"] = $"{currentMusic.Song.Title} successfully brought and added to the collection!. Current wallet value: ${currentUser.Wallet.Value.ToString("0.00")}";
+                
+            } else
             {
-                ViewBag.Notification = $"{currentMusic.Song.Title} is already in the collection!";
+                TempData["validPurchase"] = false;
+                TempData["notification"] = $"Not enough money to purchase: {currentMusic.Song.Title}";
             }
-            ViewBag.isValidEntry = checkCollection;
+            
 
             return RedirectToAction("UserCollection", new { userId });
         }       

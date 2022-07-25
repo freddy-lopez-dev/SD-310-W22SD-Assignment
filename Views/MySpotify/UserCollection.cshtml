@@ -4,7 +4,7 @@
 <div style="display: flex; align-items: center; justify-content: space-between">
     <div>
     <h3 style="color: azure">@Model.CurrentUser.Name Music Collection</h3>
-    <h4 style="color: azure">Wallet: @Model.CurrentUser.Wallet</h4>
+    <h4 style="color: azure">Wallet: $@Model.CurrentUser.Wallet.Value.ToString("0.00")</h4>
     </div>
     <div>
         <form asp-action="UserCollection" method="get">
@@ -29,6 +29,12 @@
             <th>
                 Song
             </th>
+            <th>
+                Refund
+            </th>
+            <th>
+                Purchase Date
+            </th>
         </tr>
     </thead>
     <tbody style="color: green">
@@ -40,19 +46,25 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Music.Song.Title)
             </td>
+            <td>
+                @if(DateTime.Now <= item.PurchaseDate.AddDays(30))
+                {
+                    <form asp-action="EndRental" method="post">
+                    <input type="hidden" value="@item.Id" name="rentalId"/>
+                    <button type="submit" class="btn" style="background-color: green">Refund</button>
+                    </form>
+                }
+                else
+                {
+                    <p>Refund not allowed(Over 30 days)</p>                            
+                }
+            </td>
 
         </tr>
 }
     </tbody>
 </table>
-    @if(ViewBag.isValidEntry == false)
-    {
-       <p style="color: green">@ViewBag.Notification</p> 
-    } 
-    else
-    {
-       <p style="color: red">@ViewBag.Notification</p>   
-    } 
+
 <div class="row" style="border-bottom: 1px solid azure; padding-bottom: 1em">
     <div class="col-md-10">
         <form asp-action="UserCollection" asp-route-id="@Model.CurrentUser.Id" method="post">
@@ -87,3 +99,9 @@
 </div>
 }
 
+@if(ViewBag.Alert == false) {
+    <p style="color: red">@ViewBag.Notification</p>
+}
+else {
+    <p style="color: green">@ViewBag.Notification</p> 
+ }

@@ -28,7 +28,8 @@ namespace SD_310_W22SD_Assignment.Models.ViewModels
                 });
             } else
             {
-                List<Music> checkedMusic = music.Where(m => !collections.Any(c => c.MusicId == m.Id)).ToList();
+                List<Music> checkedMusic = music.Where(m => !collections.Any(c => c.MusicId == m.Id)).OrderBy(m => m.Artist.Name).ToList();
+                
                 checkedMusic.ForEach(m =>
                 {
                     string txt = $"{m.Song.Title} - {m.Artist.Name} ({m.Price})";
