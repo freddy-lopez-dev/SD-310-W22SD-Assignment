@@ -49,8 +49,9 @@
             <td>
                 @if(DateTime.Now <= item.PurchaseDate.AddDays(30))
                 {
-                    <form asp-action="EndRental" method="post">
-                    <input type="hidden" value="@item.Id" name="rentalId"/>
+                    <form asp-action="RefundMusic" method="post">
+                    <input type="hidden" value="@item.Id" name="collectionId"/>
+                    <input type="hidden" value="@item.UserId" name="userId" />
                     <button type="submit" class="btn" style="background-color: green">Refund</button>
                     </form>
                 }

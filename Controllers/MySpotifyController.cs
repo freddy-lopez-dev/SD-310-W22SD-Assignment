@@ -60,7 +60,20 @@ namespace SD_310_W22SD_Assignment.Controllers
             
 
             return RedirectToAction("UserCollection", new { userId });
-        }       
+        }
+
+        [HttpPost]           
+        public IActionResult RefundMusic(int collectionId, int userId)
+        {
+            Collection currentCollection = _db.Collections.Include(c => c.Music).ThenInclude(m => m.Song).First(c => c.Id == collectionId);
+            User currentUser = _db.Users.First(u => u.Id == userId);
+            _db.Collections.Remove(currentCollection);
+            currentUser.Wallet += currentCollection.Music.Price;
+            _db.SaveChanges();
+            TempData["validPurchase"] = true;
+            TempData["notification"] = $"{currentCollection.Music.Song.Title} has successfully been refunded!. Current wallet value: ${currentUser.Wallet.Value.ToString("0.00")}";
+            return RedirectToAction("UserCollection", new { userId });
+        }
 
         public IActionResult FindArtist()
         {
