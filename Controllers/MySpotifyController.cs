@@ -17,12 +17,14 @@ namespace SD_310_W22SD_Assignment.Controllers
         }
         public IActionResult Index()
         {
-            ViewBag.ArtistList = _db.Artists;
-            ViewBag.Music = _db.Musics.Take(5).Include(m => m.Artist).Include(m => m.Song);
-            return View(_db.Musics.Take(9).Include(m => m.Artist).Include(m => m.Song));
+            List<Music> musics = _db.Musics.Include(m => m.Collections).Include(m => m.Song).ToList();
+            List<Collection> collections = _db.Collections.Include(c => c.Music).ThenInclude(m => m.Artist).ToList();
+            List<Artist> artists = _db.Artists.Include(a => a.Musics).ToList();
+            IndexViewModel IVM = new IndexViewModel(musics, collections, artists);
+            return View(IVM);
         }
 
-        //Refactored into ViewModel from ViewBag
+        //Refactored into ViewModel from ViewBag Part 1
         public IActionResult UserCollection(int? userId = 1)
         {
             User currentUser = _db.Users.First(u => u.Id == userId);
@@ -75,6 +77,12 @@ namespace SD_310_W22SD_Assignment.Controllers
             return RedirectToAction("UserCollection", new { userId });
         }
 
+        /* Rating music is implemented in the same page as UserCollection. 
+         * This will solve the validation of user should not be able to rate the music that has not been purchased.
+         * RateMusic will get the user selection by clicking of stars in the table (UserCollection View).
+         * Stars defined in a loop index to have a value from 0 to 4.
+         * Adding 1 and assigning it to the collection rating value.
+         */
         [HttpPost]
         public IActionResult RateMusic(int rateCount, int userId, int collectionId)
         {

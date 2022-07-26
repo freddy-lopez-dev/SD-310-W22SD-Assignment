@@ -1,24 +1,13 @@
-﻿@model IEnumerable<Music>
+﻿@using SD_310_W22SD_Assignment.Models.ViewModels
+@model IndexViewModel
 
 <div style="display: flex">
 <div style="color: green; margin-right: 6em">
     <h3 style="color: azure">Top Selling Song</h3>
-    
-    <ol style="margin-bottom: 2em">
-        @foreach(Artist artist in ViewBag.ArtistList)
-        {
-            <li>@artist.Name</li>
-        }
-    </ol>
+    <h4>@Model.TopSong.Title</h4>
 
     <h3 style="color: azure">Top Selling Artist</h3>
-    
-    <ol>
-        @foreach(Music music in ViewBag.Music)
-        {
-            <li>@music.Song.Title - @music.Artist.Name</li>
-        }
-    </ol>
+    <h4>@Model.TopArtist.Name</h4>
 </div>
 
 <div style="color: green; width: 700px">
@@ -39,20 +28,11 @@
         </tr>
     </thead>
     <tbody style="color: green">
-@foreach (Music music in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => music.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => music.Song.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => music.Artist.Name)
-            </td>
-
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
-}
     </tbody>
 </table>
 
