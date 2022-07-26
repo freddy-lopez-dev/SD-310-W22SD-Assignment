@@ -15,12 +15,12 @@ namespace SD_310_W22SD_Assignment.Controllers
         {
             _db = context;
         }
-        public IActionResult Index()
+        public IActionResult Index(DateTime dateValue)
         {
             List<Music> musics = _db.Musics.Include(m => m.Collections).Include(m => m.Song).ToList();
             List<Collection> collections = _db.Collections.Include(c => c.Music).ThenInclude(m => m.Artist).ToList();
             List<Artist> artists = _db.Artists.Include(a => a.Musics).ToList();
-            IndexViewModel IVM = new IndexViewModel(musics, collections, artists);
+            IndexViewModel IVM = new IndexViewModel(musics, collections, artists, dateValue);
             return View(IVM);
         }
 

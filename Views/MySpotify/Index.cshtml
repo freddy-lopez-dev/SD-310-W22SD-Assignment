@@ -3,11 +3,14 @@
 
 <div style="display: flex">
 <div style="color: green; margin-right: 6em">
+    <div style="margin-bottom: 3em">
     <h3 style="color: azure">Top Selling Song</h3>
     <h4>@Model.TopSong.Title</h4>
-
+    </div>
+    <div>
     <h3 style="color: azure">Top Selling Artist</h3>
     <h4>@Model.TopArtist.Name</h4>
+    </div>
 </div>
 
 <div style="color: green; width: 700px">
@@ -17,23 +20,87 @@
     <thead style="color: azure">
         <tr>
             <th>
-                Top
-            </th>
-            <th>
                 Song
             </th>
             <th>
-                Title
+                Artist
+            </th>
+            <th>
+                Average Rating
             </th>
         </tr>
     </thead>
     <tbody style="color: green">
+@foreach (Music music in Model.Top3Rated) {
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>
+                @Html.DisplayFor(modelItem => music.Song.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => music.Artist.Name)
+            </td>
+            <td>
+                @music.Collections.Average(c => c.Rating)
+            </td>
+
         </tr>
-    </tbody>
+}    </tbody>
+</table>
+
+</div>
+
+
+</div>
+
+<div style="display: flex" class="border-top">
+<div style="color: azure; margin-right: 9.5em">
+    <h4 style="margin-top: 1em">Total Revenue</h4>
+        @if(Model.SelectedYear == 1)
+    {
+        <h4 style="color: green">$@Model.TotalRevenue</h4>
+    } else
+    {
+        <h4 style="color:green">$@Model.TotalRevenue - @Model.SelectedMonth/@Model.SelectedYear</h4>
+    }
+    <p>Please select a date</p>
+    <form asp-action="Index">
+        <input type="date" min="2000-01-01" max="2022-12-31" name="dateValue" style="display: block; margin-bottom: 1em" />
+        <input type="submit" value="Get Revenue" class="btn" style="background-color: green;"/>
+    </form>
+</div>
+
+<div style="color: green; width: 700px; margin-top: 1em">
+    <h4 style="color: azure">Song Sales @Model.SelectedMonth/@Model.SelectedYear</h4>
+
+    <table class="table">
+    <thead style="color: azure">
+        <tr>
+            <th>
+                Song
+            </th>
+            <th>
+                Artist
+            </th>
+            <th>
+                Price
+            </th>
+        </tr>
+    </thead>
+    <tbody style="color: green">
+@foreach (Collection collection in Model.purchasedMusicByMonth) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => collection.Music.Song.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => collection.Music.Artist.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => collection.Music.Price)
+            </td>
+
+        </tr>
+}    </tbody>
 </table>
 
 </div>

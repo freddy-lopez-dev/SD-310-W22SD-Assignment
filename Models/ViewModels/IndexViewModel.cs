@@ -4,10 +4,13 @@
     {
         public Song TopSong { get; set; }
         public Artist TopArtist { get; set; }
-        List<Music> Top3Rated { get; set; }
+        public List<Music> Top3Rated { get; set; }
+        public int TotalRevenue { get; set; }
+        public int SelectedYear { get; set; }
+        public int SelectedMonth { get; set; }
+        public List<Collection> purchasedMusicByMonth { get; set; }
 
-
-        public IndexViewModel(List<Music> musics, List<Collection> collections, List<Artist> artists)
+        public IndexViewModel(List<Music> musics, List<Collection> collections, List<Artist> artists, DateTime dateValue)
         {
             // Getting the top selling song
             Music currentMusic = musics.OrderByDescending(m => m.Collections.Count()).First();
@@ -28,24 +31,23 @@
             TopArtist = TopArtists.OrderByDescending(t => t.Value).ToDictionary(t => t.Key, t => t.Value).First().Key;
 
             // Getting the top 3 highest rating music
-            Dictionary<Music, int> TopRatedMusic = new Dictionary<Music, int>();
+            Dictionary<Music, int> GetAvgMusic = new Dictionary<Music, int>();
             Dictionary<Music, int> FilteredTo3Music = new Dictionary<Music, int>();
-            collections.ForEach(c =>
+            musics.ForEach(m =>
             {
-                if (TopRatedMusic.ContainsKey(c.Music))
-                {
-                    TopRatedMusic[c.Music] += c.Rating;
-                }
-                else
-                {
-                    TopRatedMusic.Add(c.Music, c.Rating);
-                }
+                GetAvgMusic.Add(m, m.Collections.Count == 0 ? 0 : (int)m.Collections.Average(c => c.Rating));
             });
-            FilteredTo3Music = TopRatedMusic.OrderByDescending(t => t.Value).ToDictionary(t => t.Key, t => t.Value);
-            foreach(KeyValuePair<Music, int> pair in FilteredTo3Music)
-            {
-                Top3Rated.Add(pair.Key);
-            }
+            FilteredTo3Music = GetAvgMusic.OrderByDescending(g => g.Value).Take(3).ToDictionary(g => g.Key, g => g.Value);
+            Top3Rated = FilteredTo3Music.Keys.ToList();
+
+            // Getting Getting the top Revenue
+            int currentYear = dateValue.Year;
+            int currentMonth = dateValue.Month;
+            SelectedMonth = currentMonth;
+            SelectedYear = currentYear;
+            List<Collection> datedCollection = collections.Where(c => c.PurchaseDate.Year == currentYear && c.PurchaseDate.Month == currentMonth).ToList();
+            purchasedMusicByMonth = datedCollection;
+            TotalRevenue = (int)datedCollection.Sum(c => c.Music.Price);
         }
     }
 }
