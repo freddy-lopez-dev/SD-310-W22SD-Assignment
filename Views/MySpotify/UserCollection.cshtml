@@ -5,12 +5,14 @@
     <div>
     <h3 style="color: azure">@Model.CurrentUser.Name Music Collection</h3>
     <h4 style="color: azure; display: inline">Wallet: $@Model.CurrentUser.Wallet.Value.ToString("0.00")</h4>
+    <p style="color: green; display: inline">@ViewBag.LoadNotif</p>
     <form asp-action="ReloadWallet" method="post">
+        <p style="color: azure; display: inline">Reload Wallet:</p>
         <input type="hidden" value="@Model.CurrentUser.Id" name="userId" />
-        <input type="submit" value="50" style="background-color: green" class="btn" />
-        <input type="submit" value="30" style="background-color: green" class="btn" />
-        <input type="submit" value="10" style="background-color: green" class="btn" />
-        <input type="submit" value="5" style="background-color: green" class="btn" />
+        <input type="submit" value="50" style="background-color: green" class="btn" name="amount" />
+        <input type="submit" value="30" style="background-color: green" class="btn" name="amount"/>
+        <input type="submit" value="10" style="background-color: green" class="btn" name="amount"/>
+        <input type="submit" value="5" style="background-color: green" class="btn" name="amount"/>
     </form>
     </div>
     <div>

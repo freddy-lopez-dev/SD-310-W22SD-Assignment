@@ -55,6 +55,7 @@ namespace SD_310_W22SD_Assignment.Controllers
             //https://www.tutorialsteacher.com/mvc/tempdata-in-asp.net-mvc
             ViewBag.Alert = TempData["ValidPurchase"];
             ViewBag.Notification = TempData["notification"];
+            ViewBag.LoadNotif = TempData["LoadNotif"];
             return View(cvm);
         }
 
@@ -109,6 +110,16 @@ namespace SD_310_W22SD_Assignment.Controllers
             Collection currentCollection = _db.Collections.First(c => c.Id == collectionId);
             currentCollection.Rating = rateCount + 1;
             _db.SaveChanges();
+            return RedirectToAction("UserCollection", new { userId });
+        }
+
+        [HttpPost]
+        public IActionResult ReloadWallet(int amount, int userId)
+        {
+            User currentUser = _db.Users.First(u => u.Id == userId);
+            currentUser.Wallet += amount;
+            _db.SaveChanges();
+            TempData["LoadNotif"] = $"Successfully reloaded: ${amount}";
             return RedirectToAction("UserCollection", new { userId });
         }
 

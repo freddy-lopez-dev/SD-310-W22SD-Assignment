@@ -5,7 +5,7 @@
         public Song TopSong { get; set; }
         public Artist TopArtist { get; set; }
         public List<Music> Top3Rated { get; set; }
-        public int TotalRevenue { get; set; }
+        public float TotalRevenue { get; set; }
         public int SelectedYear { get; set; }
         public int SelectedMonth { get; set; }
         public List<Collection> purchasedMusicByMonth { get; set; }
@@ -47,7 +47,7 @@
             SelectedYear = currentYear;
             List<Collection> datedCollection = collections.Where(c => c.PurchaseDate.Year == currentYear && c.PurchaseDate.Month == currentMonth).ToList();
             purchasedMusicByMonth = datedCollection;
-            TotalRevenue = (int)datedCollection.Sum(c => c.Music.Price);
+            TotalRevenue = (float)datedCollection.Sum(c => c.Music.Price);
         }
     }
 }
