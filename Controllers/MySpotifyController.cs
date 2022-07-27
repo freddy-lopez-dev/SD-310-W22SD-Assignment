@@ -15,13 +15,33 @@ namespace SD_310_W22SD_Assignment.Controllers
         {
             _db = context;
         }
+
+        /* Using IndexViewModel to generate the following data in Home Screen
+         * - Top Song
+         * - Top Artist
+         * - Top 3 Rated
+         * - Month/Year Total Revenue
+         * - All song sold in selected month and year
+         */
         public IActionResult Index(DateTime dateValue)
         {
-            List<Music> musics = _db.Musics.Include(m => m.Collections).Include(m => m.Song).ToList();
-            List<Collection> collections = _db.Collections.Include(c => c.Music).ThenInclude(m => m.Artist).ToList();
-            List<Artist> artists = _db.Artists.Include(a => a.Musics).ToList();
-            IndexViewModel IVM = new IndexViewModel(musics, collections, artists, dateValue);
-            return View(IVM);
+            try
+            {
+                List<Music> musics = _db.Musics.Include(m => m.Collections).Include(m => m.Song).ToList();
+                List<Collection> collections = _db.Collections.Include(c => c.Music).ThenInclude(m => m.Artist).ToList();
+                List<Artist> artists = _db.Artists.Include(a => a.Musics).ToList();
+                IndexViewModel IVM = new IndexViewModel(musics, collections, artists, dateValue);
+                return View(IVM);
+            } catch
+            {
+                return RedirectToAction("EmptyHomeView");
+            }
+            
+        }
+
+        public IActionResult EmptyHomeView()
+        {
+            return View();
         }
 
         //Refactored into ViewModel from ViewBag Part 1

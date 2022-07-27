@@ -4,7 +4,14 @@
 <div style="display: flex; align-items: center; justify-content: space-between">
     <div>
     <h3 style="color: azure">@Model.CurrentUser.Name Music Collection</h3>
-    <h4 style="color: azure">Wallet: $@Model.CurrentUser.Wallet.Value.ToString("0.00")</h4>
+    <h4 style="color: azure; display: inline">Wallet: $@Model.CurrentUser.Wallet.Value.ToString("0.00")</h4>
+    <form asp-action="ReloadWallet" method="post">
+        <input type="hidden" value="@Model.CurrentUser.Id" name="userId" />
+        <input type="submit" value="50" style="background-color: green" class="btn" />
+        <input type="submit" value="30" style="background-color: green" class="btn" />
+        <input type="submit" value="10" style="background-color: green" class="btn" />
+        <input type="submit" value="5" style="background-color: green" class="btn" />
+    </form>
     </div>
     <div>
         <form asp-action="UserCollection" method="get">

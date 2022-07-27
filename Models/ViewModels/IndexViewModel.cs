@@ -37,7 +37,7 @@
             {
                 GetAvgMusic.Add(m, m.Collections.Count == 0 ? 0 : (int)m.Collections.Average(c => c.Rating));
             });
-            FilteredTo3Music = GetAvgMusic.OrderByDescending(g => g.Value).Take(3).ToDictionary(g => g.Key, g => g.Value);
+            FilteredTo3Music = GetAvgMusic.OrderByDescending(g => g.Value).Where(g => g.Value != 0).Take(3).ToDictionary(g => g.Key, g => g.Value);
             Top3Rated = FilteredTo3Music.Keys.ToList();
 
             // Getting Getting the top Revenue
